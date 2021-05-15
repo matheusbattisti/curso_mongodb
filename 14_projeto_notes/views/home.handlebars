@@ -1,0 +1,19 @@
+<h1>Suas notas:</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Título:</th>
+      <th scope="col">Ações:</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each notes}}
+    <tr>
+      <th scope="row">{{ @index }}</th>
+      <td><a href="notes/{{ this._id }}">{{ this.title }}</a></td>
+      <td><a href="notes/edit/{{ this._id }}">Editar</a> - <a href="notes/delete/{{ this._id }}">Deletar</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
