@@ -30,7 +30,7 @@ db.inspections.dropIndex({ certificate_number: 1 })
 
 # 7 - remover todos os index
 
-db.inspections.dropIndex({ certificate_number: 1 })
+db.inspections.dropIndexes()
 
 # 8 - explain
 

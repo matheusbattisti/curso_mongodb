@@ -168,7 +168,7 @@ db.alunos.updateOne({ nome: "Matheus"}, {$set: {"quimica": [10, 9, 8, 7]}})
 db.alunos.updateOne({ nome: "Pedro"}, {$set: {"quimica": [5, 9, 6, 7]}})
 db.alunos.updateOne({ nome: "Maria"}, {$set: {"quimica": [8, 8, 8, 7]}})
 
-db.alunos.insertOne({ nome: "Josias", matematica: [10, 9, 8, 7], quimica: [5, 6]})
+db.alunos.insertOne({ nome: "Joaquim", matematica: [10, 9, 8, 7], quimica: [5, 6]})
 
 db.alunos.find({ quimica: {$all: [10]} })
 

@@ -1,0 +1,17 @@
+{
+  "name": "15_mongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js localhost 8080"
+  },
+  "keywords": [],
+  "author": "Matheus <matheus@horadecodar.com.br> (http://www.horadecodar.com.br/)",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^5.12.10",
+    "nodemon": "^2.0.7"
+  }
+}

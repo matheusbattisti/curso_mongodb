@@ -4,12 +4,14 @@ const {ObjectId} = require('mongodb');
 
 const router = Router();
 
+// Receber todas as notas
 router.get('/', function(req, res) {
 
   res.render('notes/create');
 
 })
 
+// View individual de detalhes da nota
 router.get('/:id', function(req, res) {
 
   (async() => {
@@ -27,6 +29,7 @@ router.get('/:id', function(req, res) {
   
 });
 
+// View de edição
 router.get('/edit/:id', function(req, res) {
 
   (async() => {
@@ -43,7 +46,25 @@ router.get('/edit/:id', function(req, res) {
     .catch(err => console.log(err))
   
 });
+
+// Post de atualização de Nota
+router.post('/update', function(req, res) {
+
+  const data = req.body;
+  const id = new ObjectId(data.id);
+  const title = data.title;
+  const desc = data.description;
+
+  db.getDb()
+    .db()
+    .collection('notes')
+    .updateOne({_id: id}, { $set: { title: title, desc: desc } })
   
+  res.redirect('/');
+
+});
+  
+// Post de criação de Nota
 router.post('', function(req, res) {
 
   const data = req.body;
@@ -51,9 +72,26 @@ router.post('', function(req, res) {
   const desc = data.description;
 
   db.getDb()
-  .db().collection('notes').insertOne({title: title, desc: desc})
+    .db()
+    .collection('notes')
+    .insertOne({title: title, desc: desc})
 
-  res.redirect('/', 301, { msg: "Nota adicionada!"});
+  res.redirect('/', 301);
+
+});
+
+// Post de remoção de Nota
+router.post('/delete', function(req, res) {
+
+  const data = req.body;
+  const id = new ObjectId(data.id);
+
+  db.getDb()
+    .db()
+    .collection('notes')
+    .deleteOne({_id: id})
+
+  res.redirect('/', 301, { msg: "Nota removida!"});
 
 });
 

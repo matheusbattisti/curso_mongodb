@@ -11,9 +11,17 @@
     {{#each notes}}
     <tr>
       <th scope="row">{{ @index }}</th>
-      <td><a href="notes/{{ this._id }}">{{ this.title }}</a></td>
-      <td><a href="notes/edit/{{ this._id }}">Editar</a> - <a href="notes/delete/{{ this._id }}">Deletar</a></td>
+      <td class="title-column"><a href="notes/{{ this._id }}">{{ this.title }}</a></td>
+      <td class="actions-column">
+        <a href="notes/edit/{{ this._id }}" class="btn btn-primary">Editar</a>
+        <form action="notes/delete" method="POST">
+          <input type="hidden" name="id" value={{ this._id }}>
+          <input class="btn btn-danger" type="submit" value="Remover">
+        </form>
+      </td>
     </tr>
+    {{ else }}
+      <p>Não há notas no sistema ainda, <a href="notes">clique aqui para adicionar.</a></p>
     {{/each}}
   </tbody>
 </table>
