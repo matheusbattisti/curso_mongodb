@@ -16,6 +16,9 @@ const PartySchema = new mongoose.Schema({
   },
   privacy: {
     type: Boolean
+  },
+  userId: {
+    type: mongoose.ObjectId
   }
 });
 

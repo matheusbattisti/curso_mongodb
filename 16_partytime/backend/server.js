@@ -6,9 +6,10 @@ const bodyParser = require("body-parser");
 // routes
 const authRouter = require("./routes/authRoutes.js");
 const userRouter = require("./routes/userRoutes.js");
+const partyRouter = require("./routes/partyRoutes.js");
 
 // middlewares
-const verifyToken = require("./validation/check-token");
+const verifyToken = require("./helpers/check-token");
 
 // config
 const dbName = "partytime";
@@ -19,6 +20,7 @@ const app = express();
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/user", verifyToken, userRouter);
+app.use("/api/party", partyRouter);
 
 mongoose.connect(
   "mongodb://localhost/partytime",

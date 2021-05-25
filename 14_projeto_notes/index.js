@@ -40,10 +40,6 @@ db.initDb((err, db) => {
     app.listen(port, () => {
       console.log(`Projeto rodando na porta:${port}`)
     })
-    // db.db().collection('books').find().count()
-    //   .then(function(data) {
-    //     console.log(data);
-    //   })
   }
 });
 
