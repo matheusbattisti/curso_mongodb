@@ -88,8 +88,13 @@ export default {
             setTimeout(() => {
 
                 this.msg = null;   
+
+                // redirect
+                if(!data.error) {                    
+                    this.$router.push('dashboard');
+                }
                 
-            }, 3000);
+            }, 2000);
 
         })
         .catch((err) => {

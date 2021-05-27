@@ -1,15 +1,16 @@
 <template>
   <div class="data-container">
       <div class="data-table-heading">
-          <div class="data-id-heading">ID:</div>
+          <div class="data-id-heading">Nº:</div>
           <div class="data-title-heading">Nome da Festa:</div>
           <div class="data-actions-heading">Ações:</div>
       </div>
       <div class="data-table-body">
-        <div class="data-row">
-            <div class="data-id-container">01</div>
+        
+        <div class="data-row" v-for="(party, index) in parties" :key="party._id">
+            <div class="data-id-container">{{ index + 1 }}</div>
             <div class="data-title-container">
-                <a href="">Primeiro evento</a>
+                <a :href="`/party/${party._id}`">{{ party.title }}</a>
             </div>
             <div class="data-actions-container">
                 <router-link to="/editparty" class="edit-btn">Editar</router-link>
@@ -32,7 +33,8 @@
 
 <script>
 export default {
-  name: "Footer"
+  name: "Footer",
+  props: ["parties"]
 }
 </script>
 

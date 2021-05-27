@@ -4,7 +4,7 @@
         <h1>Gerencie seus eventos</h1>
         <router-link to="/newparty" class="btn">Cadastrar Festa</router-link>
     </div>
-    <DataTable />
+    <DataTable :parties="parties" />
   </div>
 </template>
 
@@ -14,7 +14,41 @@ import DataTable from '../components/DataTable'
 export default {
     components: {
         DataTable
-    }
+    },
+    data() {
+        return {
+            parties: []
+        }
+    },
+    methods: {
+        async getParties() {
+
+            // get token from state
+            const token = this.$store.getters.token;
+
+            await fetch("http://localhost:3000/api/party/userparties", {
+                method: "GET",
+                headers: { 
+                    "Content-type": "application/json",
+                    "auth-token": token
+                }
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                this.parties = data.parties;
+
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+        
+        }
+    },
+    created() {
+        // load user parties
+        this.getParties();
+    },
 }
 </script>
 

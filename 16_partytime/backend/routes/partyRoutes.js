@@ -63,7 +63,7 @@ router.get("/all", async (req, res) => {
   try {      
 
     const parties = await Party.find({ privacy: false });
-    res.json({ error: null, data: parties });
+    res.json({ error: null, parties: parties });
 
   } catch (error) {
 
@@ -87,7 +87,7 @@ router.get("/userparties", verifyToken, async function (req, res) {
     console.log(userId);
 
     const parties = await Party.find({ userId: userId });
-    res.json({ error: null, data: parties });
+    res.json({ error: null, parties: parties });
 
   } catch (error) {
 
