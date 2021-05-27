@@ -1,8 +1,13 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
 
 const Party = require("../models/party")
 const User = require("../models/user");
+
+// defining file storage
+const diskStorage = require('../helpers/file-storage');
+const upload = multer({ storage: diskStorage })
 
 // middlewares
 const verifyToken = require("../helpers/check-token");
@@ -11,11 +16,16 @@ const verifyToken = require("../helpers/check-token");
 const getUserByToken = require("../helpers/get-user-by-token");
 
 // create new party
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res) => {
 
   // req data
   const title = req.body.title;
   const description = req.body.description;
+
+  const files = req.files.photos;
+
+  console.log(req.body.title);
+  console.log(req.files.photos);
 
   // validations
   if(title === null || description === null) {
@@ -35,11 +45,21 @@ router.post("/", verifyToken, async (req, res) => {
     return res.status(400).json({ error: "O usuário não existe!" });
   }
 
+  let photos = [];
+
+  if(files.length > 0) {    
+
+    files.forEach((photo, i) => {
+      photos[i] = photo.path;
+    });
+
+  }
+
   const party = new Party({
     title: title,
     description: description,
     partyDate: req.body.party_date,
-    photos: req.body.photos,
+    photos: photos,
     privacy: req.body.privacy,
     userId: userId
   });

@@ -1,7 +1,7 @@
 <template>
     <div>
         <Message :msg="msg" :msgClass="msgClass" />
-        <form id="register-form" @submit="createParty($event)">
+        <form id="register-form" enctype="multipart/form-data" @submit="createParty($event)">
             <div class="input-container">
                 <label for="title">Título do Evento:</label>
                 <input type="text" id="title" name="title" v-model="title" placeholder="Digite o título">
@@ -16,7 +16,7 @@
             </div>
             <div class="input-container">
                 <label for="photos">Imagens:</label>
-                <input type="file" multiple id="photos" name="photos">
+                <input type="file" multiple="multiple" id="photos" name="photos" ref="file" @change="onChange">
             </div>
             <div class="input-container checkbox-container">
                 <label for="privacy">Evento privado</label>
@@ -41,8 +41,8 @@ export default {
       return {
         title: null,
         description: null,
-        date: null,
-        photos: null,
+        party_date: null,
+        photos: [],
         privacy: null,
         msg: null,
         msgClass: null,
@@ -53,26 +53,28 @@ export default {
         
         e.preventDefault();
 
-        const data = {
-            title: this.title,
-            description: this.description,
-            date: this.date,
-            photos: this.photos,
-            privacy: this.privacy
-        }
+        const formData = new FormData();
 
-        const jsonData = JSON.stringify(data);
+        formData.append('title', this.title);
+        formData.append('description', this.description);
+        formData.append('party_date', this.party_date);
+        formData.append('privacy', this.privacy);
+
+        if(this.photos.length > 0) {
+            for (const i of Object.keys(this.photos)) {
+                formData.append('photos', this.photos[i])
+            }
+        }
 
         // get token from state
         const token = this.$store.getters.token;
 
         await fetch("http://localhost:3000/api/party", {
             method: "POST",
-            headers: { 
-                "Content-type": "application/json",
+            headers: {
                 "auth-token": token
             },
-            body: jsonData
+            body: formData
         })
         .then((resp) => resp.json())
         .then((data) => {
@@ -102,6 +104,11 @@ export default {
         })
 
     
+      },
+      onChange(e) {
+
+        this.photos = e.target.files;
+
       }
   }
 }

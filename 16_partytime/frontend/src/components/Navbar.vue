@@ -75,4 +75,15 @@ export default {
     display: flex;
     justify-content: flex-end;
   }
+
+  button {
+    background-color: #FFF;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    color: #c1b696;
+  }
 </style>
