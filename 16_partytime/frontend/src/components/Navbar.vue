@@ -6,17 +6,44 @@
     <h2 id="nav-title">Party Time</h2>
     <div id="nav-links">
       <router-link to="/">Festas</router-link>
-      <router-link to="/login">Entrar</router-link>
-      <router-link to="/register">Cadastrar</router-link>
+      <router-link to="/login" v-show="!authenticated">Entrar</router-link>
+      <router-link to="/register" v-show="!authenticated">Cadastrar</router-link>
+      <router-link to="/dashboard" v-show="authenticated">Dashboard</router-link>
+      <router-link to="/profile" v-show="authenticated">Configurações</router-link>
+      <button @click="logout($event)" v-show="authenticated">Logout</button>
     </div>
   </div>
 </template>
 
 
 <script>
-export default {
-  name: "Navbar"
+import { mapState } from 'vuex';
+
+export default {  
+  name: "Navbar",
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    logout(e) {
+      console.log("oi");
+      e.preventDefault();
+
+      // Emit event to logout user
+      this.$store.commit("logout");
+      // redirect
+      this.$router.push("/");
+    }
+  },
+  computed: {
+    ...mapState([
+        'authenticated',
+    ])
 }
+}
+
 </script>
 <style scoped>
   #nav {
@@ -42,6 +69,6 @@ export default {
   }
 
   #logo-container, #nav-links {
-    width: 200px;
+    width: 400px;
   }
 </style>

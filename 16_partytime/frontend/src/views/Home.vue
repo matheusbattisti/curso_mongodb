@@ -10,20 +10,20 @@
         </div>
         <div class="party-container">
             <div class="party-img" id="party-2"></div>
-            <a class="party-title" href="#">Festa de aniversário do Paulo</a>
-            <p class="party-date">Data: 05/02/2012</p>
+            <a class="party-title" href="#">Festa da empresa EuroTI</a>
+            <p class="party-date">Data: 06/12/2020</p>
             <a href="#" class="party-details-btn">Ver Mais</a>
         </div>
         <div class="party-container">
             <div class="party-img" id="party-3"></div>
-            <a class="party-title" href="#">Festa de aniversário do Paulo</a>
-            <p class="party-date">Data: 05/02/2012</p>
+            <a class="party-title" href="#">Aniversário da Patrícia</a>
+            <p class="party-date">Data: 13/11/2018</p>
             <a href="#" class="party-details-btn">Ver Mais</a>
         </div>
                 <div class="party-container">
             <div class="party-img" id="party-4"></div>
-            <a class="party-title" href="#">Festa de aniversário do Paulo</a>
-            <p class="party-date">Data: 05/02/2012</p>
+            <a class="party-title" href="#">Reveillon de Floripa</a>
+            <p class="party-date">Data: 31/12/2019</p>
             <a href="#" class="party-details-btn">Ver Mais</a>
         </div>
     </div>
@@ -60,6 +60,8 @@
         width: 100%;
         height: 200px;
         margin-bottom: 12px;
+        background-position: center;
+        background-size: cover;
     }
 
     .party-title {
@@ -87,6 +89,22 @@
 
     .party-details-btn:hover {
         background-color: #141619;
+    }
+    
+    #party-1 {
+        background-image: url('/img/party1.jpg');
+    }
+
+    #party-2 {
+        background-image: url('/img/party2.jpg');
+    }
+
+    #party-3 {
+        background-image: url('/img/party3.jpg');
+    }
+
+    #party-4 {
+        background-image: url('/img/party4.jpg');
     }
 
 </style>

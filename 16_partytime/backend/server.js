@@ -2,6 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 // routes
 const authRouter = require("./routes/authRoutes.js");
@@ -17,6 +18,7 @@ const port = 3000;
 
 const app = express();
 
+app.use(cors())
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/user", verifyToken, userRouter);

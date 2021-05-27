@@ -13,28 +13,41 @@ const getUserByToken = require("../helpers/get-user-by-token");
 // create new party
 router.post("/", verifyToken, async (req, res) => {
 
-  const id = req.body.user_id; 
+  // req data
+  const title = req.body.title;
+  const description = req.body.description;
+
+  // validations
+  if(title === null || description === null) {
+    return res.status(400).json({ error: "Preencha pelo menos nome e descrição." });
+  }
 
   // verify user 
-  const user = await User.findOne({ _id: id }, { password: 0 });
+  const token = req.header("auth-token");
+
+  const userByToken = await getUserByToken(token);
+  
+  const userId = userByToken._id.toString(); 
+
+  const user = await User.findOne({ _id: userId });
 
   if (!user) {
     return res.status(400).json({ error: "O usuário não existe!" });
   }
 
   const party = new Party({
-    title: req.body.title,
-    description: req.body.description,
+    title: title,
+    description: description,
     partyDate: req.body.party_date,
     photos: req.body.photos,
     privacy: req.body.privacy,
-    userId: id
+    userId: userId
   });
 
   try {      
 
       const newParty = await party.save();
-      res.json({ error: null, data: newParty });
+      res.json({ error: null, msg: "Evento criado com sucesso!", data: newParty });
 
   } catch (error) {
 

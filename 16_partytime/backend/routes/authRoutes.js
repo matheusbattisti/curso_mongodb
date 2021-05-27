@@ -6,6 +6,23 @@ const User = require("../models/user");
 
 router.post("/register", async (req, res) => {
 
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmpassword = req.body.confirmpassword;
+
+    console.log(req.body);
+
+    // check for required fields
+    if(name === null || email === null || password === null || confirmpassword === null) {
+        return res.status(400).json({ error: "Por favor, preencha todos os campos." });
+    }
+
+    // confirm password validation
+    if(password != confirmpassword) {
+        return res.status(400).json({ error: "As senhas não conferem." });
+    }
+
     // verify user email
     const isEmailExists = await User.findOne({ email: req.body.email });
 
@@ -17,18 +34,30 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(12);
     const reqPassword = req.body.password;
 
-    const password = await bcrypt.hash(reqPassword, salt);
+    const passwordHash = await bcrypt.hash(reqPassword, salt);
   
     const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password
+        name: name,
+        email: email,
+        password: passwordHash
     });
 
     try {      
 
         const newUser = await user.save();
-        res.json({ error: null, data: newUser._id });
+
+        // create token
+        const token = jwt.sign(
+            // payload data
+            {
+            name: user.name,
+            id: user._id,
+            },
+            "nossosecret"
+        );
+        
+        // return token
+        res.json({ error: null, msg: "Você realizou o cadastro com sucesso!", token: token });
 
     } catch (error) {
 
@@ -67,12 +96,8 @@ router.post("/login", async (req, res) => {
         "nossosecret"
     );
 
-    res.header("auth-token", token).json({
-        error: null,
-        data: {
-          token,
-        },
-    });
+    // return token
+    res.json({ error: null, msg: "Você está autenticado!", token: token });
 
 
 })

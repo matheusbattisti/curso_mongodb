@@ -1,32 +1,100 @@
 <template>
-    <form id="register-form">
-        <div class="input-container">
-            <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" placeholder="Digite o seu nome">
-        </div>
-        <div class="input-container">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Digite o seu e-mail">
-        </div>
-        <div class="input-container">
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha">
-        </div>
-        <div class="input-container">
-            <label for="confirmpassword">Confirmação:</label>
-            <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirme sua senha">
-        </div>
-        <InputSubmit text="Cadastrar" />
-    </form>
+    <div>
+        <Message :msg="msg" :msgClass="msgClass" />
+        <form id="register-form" @submit="register($event)">
+            <div class="input-container">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" v-model="name" placeholder="Digite o seu nome">
+            </div>
+            <div class="input-container">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" v-model="email"  placeholder="Digite o seu e-mail">
+            </div>
+            <div class="input-container">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" v-model="password"  placeholder="Digite sua senha">
+            </div>
+            <div class="input-container">
+                <label for="confirmpassword">Confirmação:</label>
+                <input type="password" id="confirmpassword" name="confirmpassword" v-model="confirmpassword"  placeholder="Confirme sua senha">
+            </div>
+            <InputSubmit text="Cadastrar" />
+        </form>
+    </div>
 </template>
 
 <script>
 import InputSubmit from './form/InputSubmit'
+import Message from './Message';
 
 export default {
   name: "RegisterForm",
   components: {
-    InputSubmit
+    InputSubmit,
+    Message
+  },
+  data() {
+    return {
+        name: null,
+        email: null,
+        password: null,
+        confirmpassword: null,
+        msg: null,
+        msgClass: null,
+    }
+  },
+  methods: {
+    async register(e) {
+        e.preventDefault();
+
+        const data = {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            confirmpassword: this.confirmpassword
+        }
+
+        const jsonData = JSON.stringify(data);
+
+        await fetch("http://localhost:3000/api/auth/register", {
+            method: "POST",
+            headers: { "Content-type": "application/json" },
+            body: jsonData
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+
+            let auth = false;
+
+            if(data.error) {
+                this.msg = data.error;
+                this.msgClass = "error";
+            } else {
+                auth = true;
+                this.msg = data.msg;
+                this.msgClass = "success";
+
+                // Emit event for auth an user
+                this.$store.commit("authenticate", data.token);
+            }
+            
+            setTimeout(() => {
+
+                if(!auth) {
+                    this.msg = null;                                   
+                } else {
+                    // redirect
+                    this.$router.push('dashboard');
+                }
+                
+            }, 3000);
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+    }
   }
 }
 </script>
