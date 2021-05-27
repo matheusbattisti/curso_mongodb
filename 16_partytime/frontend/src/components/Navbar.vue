@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     logout(e) {
-      console.log("oi");
       e.preventDefault();
 
       // Emit event to logout user
@@ -70,5 +69,10 @@ export default {
 
   #logo-container, #nav-links {
     width: 400px;
+  }
+
+  #nav-links {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

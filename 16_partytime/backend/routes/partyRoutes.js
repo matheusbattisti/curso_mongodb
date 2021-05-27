@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 
-const Party = require("../models/Party")
+const Party = require("../models/party")
 const User = require("../models/user");
 
 // middlewares
