@@ -9,22 +9,26 @@ export default createStore({
   state() {
     return {
       authenticated: false,
-      token: null
+      token: null,
+      userId: null
     }
   },
   mutations: {
-    authenticate(state, token) {
+    authenticate(state, data) {
       state.authenticated = true
-      state.token = token
+      state.token = data.token
+      state.userId = data.userId
     },
     logout(state) {
       state.authenticated = false
       state.token = null
+      state.userId = null
     },
   },
   getters: {
-    auth: state => state.authenticated,
-    token: state => state.token
+    authenticated: state => state.authenticated,
+    token: state => state.token,
+    userId: state => state.userId
   },
   plugins: [vuexLocal.plugin]
 })

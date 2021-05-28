@@ -63,7 +63,7 @@ export default {
                 this.msgClass = "success";
 
                 // Emit event for auth an user
-                this.$store.commit("authenticate", data.token);
+                this.$store.commit("authenticate", {token: data.token, userId: data.userId});
             }
             
             setTimeout(() => {
@@ -75,7 +75,7 @@ export default {
                     this.$router.push('dashboard');
                 }
                 
-            }, 3000);
+            }, 2000);
 
         })
         .catch((err) => {

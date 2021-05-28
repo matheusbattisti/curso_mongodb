@@ -8,12 +8,12 @@ const verifyToken = require("../helpers/check-token");
 // helpers
 const getUserByToken = require("../helpers/get-user-by-token");
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
 
-    const id = req.body._id; 
+    const id = req.params.id;
 
     // verify user 
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ _id: id }, {password: 0});
 
     if (!user) {
         return res.status(400).json({ error: "O usuário não existe!" });

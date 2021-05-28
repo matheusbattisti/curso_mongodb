@@ -1,16 +1,16 @@
 <template>
   <div class="register">
     <h1>Criar uma conta</h1>
-    <RegisterForm />
+    <UserForm />
   </div>
 </template>
 
 <script>
-import RegisterForm from '../components/RegisterForm'
+import UserForm from '../components/UserForm'
 
 export default {
     components: {
-        RegisterForm
+        UserForm
     }
 }
 </script>

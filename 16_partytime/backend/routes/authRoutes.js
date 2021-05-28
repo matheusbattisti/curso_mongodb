@@ -50,14 +50,14 @@ router.post("/register", async (req, res) => {
         const token = jwt.sign(
             // payload data
             {
-            name: user.name,
-            id: user._id,
+            name: newUser.name,
+            id: newUser._id,
             },
             "nossosecret"
         );
         
         // return token
-        res.json({ error: null, msg: "Você realizou o cadastro com sucesso!", token: token });
+        res.json({ error: null, msg: "Você realizou o cadastro com sucesso!", token: token, userId: newUser._id });
 
     } catch (error) {
 
@@ -97,7 +97,7 @@ router.post("/login", async (req, res) => {
     );
 
     // return token
-    res.json({ error: null, msg: "Você está autenticado!", token: token });
+    res.json({ error: null, msg: "Você está autenticado!", token: token, userId: user._id });
 
 
 })
