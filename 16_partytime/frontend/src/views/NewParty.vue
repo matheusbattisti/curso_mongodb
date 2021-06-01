@@ -1,7 +1,7 @@
 <template>
   <div class="newparty">
     <h1>Adicione a sua festa:</h1>
-    <PartyForm />
+    <PartyForm :party="{}" page="newparty" btnText="Criar Festa!" />
   </div>
 </template>
 

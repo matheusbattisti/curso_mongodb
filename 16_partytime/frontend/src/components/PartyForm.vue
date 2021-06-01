@@ -1,7 +1,7 @@
 <template>
     <div>
         <Message :msg="msg" :msgClass="msgClass" />
-        <form id="register-form" enctype="multipart/form-data" @submit="createParty($event)">
+        <form id="register-form" enctype="multipart/form-data" @submit="page === 'newparty' ? createParty($event) : update($event)">
             <div class="input-container">
                 <label for="title">Título do Evento:</label>
                 <input type="text" id="title" name="title" v-model="title" placeholder="Digite o título">
@@ -22,7 +22,7 @@
                 <label for="privacy">Evento privado</label>
                 <input type="checkbox" multiple id="privacy" name="privacy" v-model="privacy">
             </div>
-            <InputSubmit text="Criar Festa!" />
+            <InputSubmit :text="btnText" />
         </form>
     </div>
 </template>
@@ -48,6 +48,7 @@ export default {
         msgClass: null,
       }
   },
+  props: ["party", "page", "btnText"],
   methods: {
       async createParty(e) {
         

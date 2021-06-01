@@ -18,6 +18,7 @@
                 <button class="remove-btn" @click="remove(party._id)">Remover</button>
             </div>
         </div>
+
       </div>
   </div>
 </template>
@@ -69,6 +70,9 @@ export default {
                 this.msg = data.msg;
                 this.msgClass = "success";
             }
+
+            // get all parties again
+            this.$parent.getParties();
 
             setTimeout(() => {
 

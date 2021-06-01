@@ -23,7 +23,11 @@ router.post("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res
   const description = req.body.description;
   const partyDate = req.body.partyDate;
 
-  const files = req.files.photos;
+  let files = [];
+
+  if(req.files) {
+    files = req.files.photos;
+  }
 
   // validations
   if(title == "null" || description == "null" || partyDate == "null") {
@@ -104,6 +108,29 @@ router.get("/userparties", verifyToken, async function (req, res) {
 
     const parties = await Party.find({ userId: userId });
     res.json({ error: null, parties: parties });
+
+  } catch (error) {
+
+    res.status(400).json({ error })
+      
+  }
+
+});
+
+// get user party
+router.get("/userparty/:id", verifyToken, async function (req, res) {
+
+  try {      
+
+    const token = req.header("auth-token");
+
+    const user = await getUserByToken(token);
+    
+    const userId = user._id.toString();
+    const partyId = req.params.id;
+
+    const party = await Party.findOne({ _id: partyId, userId: userId });
+    res.json({ error: null, party: party });
 
   } catch (error) {
 
