@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
 
@@ -28,8 +29,9 @@ router.put("/", verifyToken, async (req, res) => {
 
     const token = req.header("auth-token");
     const user = await getUserByToken(token);
-    const partyId = req.body._id;
-    const userReqId = req.body._id;
+    const userReqId = req.body.id;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmpassword;
   
     const userId = user._id.toString();
   
@@ -39,11 +41,38 @@ router.put("/", verifyToken, async (req, res) => {
       res.status(401).json({ error: "Acesso negado!" });
   
     }
+
+    // creating user object
+    const updateData = {
+      name: req.body.name,
+      email: req.body.email
+    };
+
+    // check if password match
+    if(password != confirmPassword) {
+
+      res.status(401).json({ error: "As senhas não conferem." });
+    
+    // change password
+    } else if(password == confirmPassword && password != null) {
+
+      // creating password
+      const salt = await bcrypt.genSalt(12);
+      const reqPassword = req.body.password;
+
+      const passwordHash = await bcrypt.hash(reqPassword, salt);
+
+      req.body.password = passwordHash;
+
+      // updating data
+      updateData.password = passwordHash;
+
+    }
   
     try {      
   
       // returns updated data
-      const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $set: req.body }, {new: true});
+      const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $set:  updateData}, {new: true});
       res.json({ error: null, msg: "Usuário atualizado com sucesso!", data: updatedUser });
   
     } catch (error) {

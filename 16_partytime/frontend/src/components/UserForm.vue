@@ -1,7 +1,8 @@
 <template>
     <div>
         <Message :msg="msg" :msgClass="msgClass" />
-        <form id="register-form" @submit="register($event)">
+        <form id="user-form" @submit="page === 'register' ? register($event) : update($event)">
+            <input type="hidden" id="name" name="name" v-model="id">
             <div class="input-container">
                 <label for="name">Nome:</label>
                 <input type="text" id="name" name="name" v-model="name" placeholder="Digite o seu nome">
@@ -18,7 +19,7 @@
                 <label for="confirmpassword">Confirmação:</label>
                 <input type="password" id="confirmpassword" name="confirmpassword" v-model="confirmpassword"  placeholder="Confirme sua senha">
             </div>
-            <InputSubmit text="Cadastrar" />
+            <InputSubmit :text="btnText" />
         </form>
     </div>
 </template>
@@ -35,15 +36,16 @@ export default {
   },
   data() {
     return {
-        name: null,
-        email: null,
+        id: this.user._id || null,
+        name: this.user.name || null,
+        email: this.user.email || null,
         password: null,
         confirmpassword: null,
         msg: null,
         msgClass: null,
     }
   },
-  props: ["userName", "userEmail"] ,
+  props: ["user", "page", "btnText"],
   methods: {
     async register(e) {
         e.preventDefault();
@@ -95,13 +97,60 @@ export default {
             console.log(err);
         })
 
+    },
+    async update(e) {
+        e.preventDefault();
+
+        const data = {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            confirmpassword: this.confirmpassword
+        }
+
+        const jsonData = JSON.stringify(data);
+
+        // get token from state
+        const token = this.$store.getters.token;
+
+        await fetch("http://localhost:3000/api/user", {
+            method: "PUT",
+            headers: { 
+                "Content-type": "application/json",
+                "auth-token": token 
+            },
+            body: jsonData
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+
+            if(data.error) {
+                this.msg = data.error;
+                this.msgClass = "error";
+            } else {
+                this.msg = data.msg;
+                this.msgClass = "success";
+            }
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+        setTimeout(() => {
+
+            this.msg = null;     
+            
+        }, 2000);
+
     }
   }
 }
 </script>
 
 <style scoped>
-    #register-form {
+    #user-form {
         max-width: 400px;
         margin: 0 auto;
         display: flex;

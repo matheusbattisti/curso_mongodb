@@ -1,28 +1,28 @@
 <template>
-  <div class="register">
-    <h1>Criar uma conta</h1>
-    <UserForm :user="{}" page="register" btnText="Cadastrar" />
+  <div class="editparty">
+    <h1>Edite a sua festa:</h1>
+    <PartyForm />
   </div>
 </template>
 
 <script>
-import UserForm from '../components/UserForm'
+import PartyForm from '../components/PartyForm.vue'
 
 export default {
     components: {
-        UserForm
+        PartyForm
     }
 }
 </script>
 
 <style scoped>
-    .register {
+    .editparty {
         text-align: center;
         padding-top: 40px;
         padding-bottom: 100px;
     }
 
-    .register h1 {
+    .editparty h1 {
         margin-bottom: 40px;
     }
 </style>

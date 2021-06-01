@@ -43,7 +43,7 @@ export default {
         description: null,
         party_date: null,
         photos: [],
-        privacy: null,
+        privacy: false,
         msg: null,
         msgClass: null,
       }

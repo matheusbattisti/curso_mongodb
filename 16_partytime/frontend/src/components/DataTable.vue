@@ -1,5 +1,6 @@
 <template>
   <div class="data-container">
+      <Message :msg="msg" :msgClass="msgClass" />
       <div class="data-table-heading">
           <div class="data-id-heading">Nº:</div>
           <div class="data-title-heading">Nome da Festa:</div>
@@ -10,21 +11,11 @@
         <div class="data-row" v-for="(party, index) in parties" :key="party._id">
             <div class="data-id-container">{{ index + 1 }}</div>
             <div class="data-title-container">
-                <a :href="`/party/${party._id}`">{{ party.title }}</a>
+                <a :to="`/party/${party._id}`">{{ party.title }}</a>
             </div>
             <div class="data-actions-container">
-                <router-link to="/editparty" class="edit-btn">Editar</router-link>
-                <button class="remove-btn">Remover</button>
-            </div>
-        </div>
-        <div class="data-row">
-            <div class="data-id-container">01</div>
-            <div class="data-title-container">
-                <a href="">Primeiro evento</a>
-            </div>
-            <div class="data-actions-container">
-                <router-link to="/editparty" class="edit-btn">Editar</router-link>
-                <button class="remove-btn">Remover</button>
+                <router-link :to="`/editparty/${party._id}`" class="edit-btn">Editar</router-link>
+                <button class="remove-btn" @click="remove(party._id)">Remover</button>
             </div>
         </div>
       </div>
@@ -32,9 +23,66 @@
 </template>
 
 <script>
+import Message from './Message';
+
 export default {
   name: "Footer",
-  props: ["parties"]
+  props: ["parties"],
+  components: {
+    Message
+  },
+  data() {
+      return {
+        msg: null,
+        msgClass: null,
+      }
+  },
+  methods: {
+    async remove(id) {
+
+        // get id and token from state
+        const userId = this.$store.getters.userId;
+        const token = this.$store.getters.token;
+
+        const data = {
+            id: id,
+            userId: userId
+        }
+
+        const jsonData = JSON.stringify(data);
+
+        await fetch(`http://localhost:3000/api/party`, {
+            method: "DELETE",
+            headers: { 
+                "Content-type": "application/json",
+                "auth-token": token 
+            },
+            body: jsonData
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+
+            if(data.error) {
+                this.msg = data.error;
+                this.msgClass = "error";
+            } else {
+                this.msg = data.msg;
+                this.msgClass = "success";
+            }
+
+            setTimeout(() => {
+
+                this.msg = null;   
+                
+            }, 2000);
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        
+    }
+  }
 }
 </script>
 
