@@ -2,7 +2,7 @@
     <div>
         <Message :msg="msg" :msgClass="msgClass" />
         <form id="user-form" @submit="page === 'register' ? register($event) : update($event)">
-            <input type="hidden" id="name" name="name" v-model="id">
+            <input type="hidden" id="id" name="id" v-model="id">
             <div class="input-container">
                 <label for="name">Nome:</label>
                 <input type="text" id="name" name="name" v-model="name" placeholder="Digite o seu nome">

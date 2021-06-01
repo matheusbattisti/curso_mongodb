@@ -1,7 +1,7 @@
 <template>
   <div class="editparty">
     <h1>Edite a sua festa:</h1>
-    <PartyForm :party="{}" page="editparty" btnText="Editar Festa" :key="componentKey"  />
+    <PartyForm :party="party" page="editparty" btnText="Editar Festa" :key="componentKey"  />
   </div>
 </template>
 
@@ -39,9 +39,11 @@ export default {
             .then((resp) => resp.json())
             .then((data) => {
 
-                console.log(data);
+                console.log(data.party);
 
                 this.party = data.party;
+
+                this.party.partyDate = this.party.partyDate.substring(0, 10)
 
                 this.componentKey += 1;
 

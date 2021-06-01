@@ -2,6 +2,8 @@
     <div>
         <Message :msg="msg" :msgClass="msgClass" />
         <form id="register-form" enctype="multipart/form-data" @submit="page === 'newparty' ? createParty($event) : update($event)">
+            <input type="hidden" id="id" name="id" v-model="id">
+            <input type="hidden" id="user_id" name="user_id" v-model="user_id">
             <div class="input-container">
                 <label for="title">Título do Evento:</label>
                 <input type="text" id="title" name="title" v-model="title" placeholder="Digite o título">
@@ -39,11 +41,13 @@ export default {
   },
   data() {
       return {
-        title: null,
-        description: null,
-        party_date: null,
+        id: this.party._id || null,
+        title: this.party.title || null,
+        description: this.party.description || null,
+        party_date: this.party.partyDate || null,
         photos: [],
-        privacy: false,
+        privacy: this.party.privacy || false,
+        user_id: this.party.userId || null,
         msg: null,
         msgClass: null,
       }
@@ -110,7 +114,55 @@ export default {
 
         this.photos = e.target.files;
 
-      }
+      },
+      async update(e) {
+        e.preventDefault();
+
+        const data = {
+            id: this.id,
+            title: this.title,
+            description: this.description,
+            party_date: this.party_date,
+            privacy: this.privacy,
+            user_id: this.user_id
+        }
+
+        const jsonData = JSON.stringify(data);
+
+        // get token from state
+        const token = this.$store.getters.token;
+
+        await fetch("http://localhost:3000/api/party", {
+            method: "PUT",
+            headers: { 
+                "Content-type": "application/json",
+                "auth-token": token 
+            },
+            body: jsonData
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+
+            if(data.error) {
+                this.msg = data.error;
+                this.msgClass = "error";
+            } else {
+                this.msg = data.msg;
+                this.msgClass = "success";
+            }
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+        setTimeout(() => {
+
+            this.msg = null;     
+            
+        }, 2000);
+
+    }
   }
 }
 </script>

@@ -71,14 +71,15 @@ export default {
                 this.msgClass = "success";
             }
 
-            // get all parties again
-            this.$parent.getParties();
-
             setTimeout(() => {
 
-                this.msg = null;   
+                this.msg = null;  
                 
-            }, 2000);
+                // get all parties again
+                this.$parent.getParties();
+
+                
+            }, 1000);
 
         })
         .catch((err) => {

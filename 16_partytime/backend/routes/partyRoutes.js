@@ -21,7 +21,7 @@ router.post("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res
   // req data
   const title = req.body.title;
   const description = req.body.description;
-  const partyDate = req.body.partyDate;
+  const partyDate = req.body.party_date;
 
   let files = [];
 
@@ -130,6 +130,9 @@ router.get("/userparty/:id", verifyToken, async function (req, res) {
     const partyId = req.params.id;
 
     const party = await Party.findOne({ _id: partyId, userId: userId });
+
+    console.log(party)
+
     res.json({ error: null, party: party });
 
   } catch (error) {
@@ -208,13 +211,13 @@ router.delete("/", verifyToken, async (req, res) => {
 
 });
 
-// Atualizar party
+// update party
 router.put("/", verifyToken, async (req, res) => {
 
   const token = req.header("auth-token");
   const user = await getUserByToken(token);
-  const partyId = req.body._id;
-  const partyUserId = req.body.userId;
+  const partyId = req.body.id;
+  const partyUserId = req.body.user_id;
 
   const userId = user._id.toString();
 
@@ -225,10 +228,12 @@ router.put("/", verifyToken, async (req, res) => {
 
   }
 
+  console.log(req.body)
+
   try {      
 
     // returns updated data
-    const updatedParty = await Party.findOneAndUpdate({ _id: partyId }, { $set: req.body }, {new: true});
+    const updatedParty = await Party.findOneAndUpdate({ _id: partyId, userId: partyUserId }, { $set: req.body }, {new: true});
     res.json({ error: null, msg: "Evento atualizado com sucesso!", data: updatedParty });
 
   } catch (error) {

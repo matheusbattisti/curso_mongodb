@@ -4,7 +4,12 @@
         <h1>Gerencie seus eventos</h1>
         <router-link to="/newparty" class="btn">Cadastrar Festa</router-link>
     </div>
-    <DataTable :parties="parties" />
+    <div v-if="parties.length > 0">
+        <DataTable :parties="parties" />
+    </div>
+    <div v-else>
+        <p>Você ainda não tem festas cadastradas, <router-link to="/newparty">clique aqui para criar a sua festa!</router-link></p>
+    </div>
   </div>
 </template>
 
