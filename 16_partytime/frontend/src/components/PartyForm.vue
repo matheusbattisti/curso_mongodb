@@ -20,6 +20,10 @@
                 <label for="photos">Imagens:</label>
                 <input type="file" multiple="multiple" id="photos" name="photos" ref="file" @change="onChange">
             </div>
+            <div v-if="page === 'editparty' && showMiniImages" class="mini-images">
+                <p>Imagens atuais:</p>
+                <img v-for="(photo, index) in photos" :src="`${photo}`" :key="index">
+            </div>
             <div class="input-container checkbox-container">
                 <label for="privacy">Evento privado</label>
                 <input type="checkbox" multiple id="privacy" name="privacy" v-model="privacy">
@@ -45,11 +49,12 @@ export default {
         title: this.party.title || null,
         description: this.party.description || null,
         party_date: this.party.partyDate || null,
-        photos: [],
+        photos: this.party.photos || null,
         privacy: this.party.privacy || false,
         user_id: this.party.userId || null,
         msg: null,
         msgClass: null,
+        showMiniImages: true,
       }
   },
   props: ["party", "page", "btnText"],
@@ -113,32 +118,37 @@ export default {
       onChange(e) {
 
         this.photos = e.target.files;
+        this.showMiniImages = false;
 
       },
       async update(e) {
+
         e.preventDefault();
 
-        const data = {
-            id: this.id,
-            title: this.title,
-            description: this.description,
-            party_date: this.party_date,
-            privacy: this.privacy,
-            user_id: this.user_id
-        }
+        const formData = new FormData();
 
-        const jsonData = JSON.stringify(data);
+        formData.append('id', this.id);
+        formData.append('title', this.title);
+        formData.append('description', this.description);
+        formData.append('partyDate', this.party_date);
+        formData.append('privacy', this.privacy);
+        formData.append('user_id', this.user_id);
+
+        if(this.photos.length > 0) {
+            for (const i of Object.keys(this.photos)) {
+                formData.append('photos', this.photos[i])
+            }
+        }
 
         // get token from state
         const token = this.$store.getters.token;
 
         await fetch("http://localhost:3000/api/party", {
             method: "PUT",
-            headers: { 
-                "Content-type": "application/json",
+            headers: {
                 "auth-token": token 
             },
-            body: jsonData
+            body: formData
         })
         .then((resp) => resp.json())
         .then((data) => {
@@ -200,6 +210,25 @@ export default {
     .checkbox-container input[type='checkbox'] {
         margin-left: 12px;
         margin-top: 3px;
+    }
+
+    .mini-images {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 0px;
+    }
+
+    .mini-images p {
+        width: 100%;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .mini-images img {
+        height: 50px;
+        margin-right: 15px;
+        margin-bottom: 15px;
     }
     
 </style>

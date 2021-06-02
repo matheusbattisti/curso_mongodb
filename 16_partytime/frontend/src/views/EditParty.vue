@@ -39,11 +39,13 @@ export default {
             .then((resp) => resp.json())
             .then((data) => {
 
-                console.log(data.party);
-
                 this.party = data.party;
 
                 this.party.partyDate = this.party.partyDate.substring(0, 10)
+
+                this.party.photos.forEach((photo, index) => {
+                    this.party.photos[index] = photo.replace("public", "http://localhost:3000");
+                });
 
                 this.componentKey += 1;
 
