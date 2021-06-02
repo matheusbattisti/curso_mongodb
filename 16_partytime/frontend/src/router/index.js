@@ -60,7 +60,7 @@ const routes = [
     }
   },
   {
-    path: '/party',
+    path: '/party/:id',
     name: 'Party',
     component: () => import(/* webpackChunkName: "party" */ '../views/Party.vue'),
     meta: {

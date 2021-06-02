@@ -85,7 +85,7 @@ router.get("/all", async (req, res) => {
 
   try {      
 
-    const parties = await Party.find({ privacy: false });
+    const parties = await Party.find({ privacy: false }).sort([['_id', -1]]);
     res.json({ error: null, parties: parties });
 
   } catch (error) {
@@ -145,10 +145,10 @@ router.get("/userparty/:id", verifyToken, async function (req, res) {
 });
 
 // get party (public and private)
-router.get("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
 
   // find party
-  const id = req.body.id;
+  const id = req.params.id;
 
   const party = await Party.findOne({ _id: id });
 
@@ -159,7 +159,7 @@ router.get("/", async (req, res) => {
   // public party
   if(party.privacy === false) {
 
-    res.json({ error: null, data: party });
+    res.json({ error: null, party: party });
 
   // private party
   } else {
@@ -173,7 +173,7 @@ router.get("/", async (req, res) => {
 
     // check if user can access event
     if(userId == partyUserId) {
-      res.json({ error: null, data: party });
+      res.json({ error: null, party: party });
     } else {
       res.status(401).json({ error: "Acesso negado!" });
     }

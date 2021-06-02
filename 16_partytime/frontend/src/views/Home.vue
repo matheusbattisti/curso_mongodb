@@ -4,35 +4,12 @@
     <div class="parties-container">
         <div v-for="(party, index) in parties" :key="index" class="party-container">
             <div class="party-img" :style="{'background-image': 'url(' + party.photos[0] +')'}"></div>
-            <a class="party-title" href="#">{{ party.title }}</a>
+            <router-link :to="`/party/${party._id}`" class="party-title">{{ party.title }}</router-link>
             <p class="party-date">Data: {{ party.partyDate }}</p>
-            <a href="#" class="party-details-btn">Ver Mais</a>
-        </div>
-        <div class="party-container">
-            <div class="party-img" id="party-1"></div>
-            <a class="party-title" href="#">Festa de aniversário do Paulo</a>
-            <p class="party-date">Data: 05/02/2012</p>
-            <a href="#" class="party-details-btn">Ver Mais</a>
-        </div>
-        <div class="party-container">
-            <div class="party-img" id="party-2"></div>
-            <a class="party-title" href="#">Festa da empresa EuroTI</a>
-            <p class="party-date">Data: 06/12/2020</p>
-            <a href="#" class="party-details-btn">Ver Mais</a>
-        </div>
-        <div class="party-container">
-            <div class="party-img" id="party-3"></div>
-            <a class="party-title" href="#">Aniversário da Patrícia</a>
-            <p class="party-date">Data: 13/11/2018</p>
-            <a href="#" class="party-details-btn">Ver Mais</a>
-        </div>
-        <div class="party-container">
-            <div class="party-img" id="party-4"></div>
-            <a class="party-title" href="#">Reveillon de Floripa</a>
-            <p class="party-date">Data: 31/12/2019</p>
-            <a href="#" class="party-details-btn">Ver Mais</a>
-        </div>
+            <router-link :to="`/party/${party._id}`" class="party-details-btn">Ver Mais</router-link>
+        </div>        
     </div>
+    <p v-if="parties.length == 0">Não há festas ainda...</p>
   </div>
 </template>
 <script>

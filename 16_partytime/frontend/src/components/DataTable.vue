@@ -11,7 +11,7 @@
         <div class="data-row" v-for="(party, index) in parties" :key="party._id">
             <div class="data-id-container">{{ index + 1 }}</div>
             <div class="data-title-container">
-                <a :to="`/party/${party._id}`">{{ party.title }}</a>
+                <router-link :to="`/party/${party._id}`">{{ party.title }}</router-link>
             </div>
             <div class="data-actions-container">
                 <router-link :to="`/editparty/${party._id}`" class="edit-btn">Editar</router-link>
