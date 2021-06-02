@@ -239,6 +239,16 @@ router.put("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res)
     return res.status(400).json({ error: "O usuário não existe!" });
   }
 
+  // build party object
+  const party = {
+    id: partyId,
+    title: title,
+    description: description,
+    partyDate: partyDate,
+    privacy: req.body.privacy,
+    userId: partyUserId
+  }; 
+
   // create photos array with path
   let photos = [];
 
@@ -248,18 +258,9 @@ router.put("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res)
       photos[i] = photo.path;
     });
 
-  }
+    party.photos = photos;
 
-  // build party object
-  const party = {
-    id: partyId,
-    title: title,
-    description: description,
-    partyDate: partyDate,
-    photos: photos,
-    privacy: req.body.privacy,
-    userId: partyUserId
-  }; 
+  }
   
   try {      
 

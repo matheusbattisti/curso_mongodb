@@ -2,6 +2,12 @@
   <div class="home">
     <h1>Veja as últimas festas</h1>
     <div class="parties-container">
+        <div v-for="(party, index) in parties" :key="index" class="party-container">
+            <div class="party-img" :style="{'background-image': 'url(' + party.photos[0] +')'}"></div>
+            <a class="party-title" href="#">{{ party.title }}</a>
+            <p class="party-date">Data: {{ party.partyDate }}</p>
+            <a href="#" class="party-details-btn">Ver Mais</a>
+        </div>
         <div class="party-container">
             <div class="party-img" id="party-1"></div>
             <a class="party-title" href="#">Festa de aniversário do Paulo</a>
@@ -20,7 +26,7 @@
             <p class="party-date">Data: 13/11/2018</p>
             <a href="#" class="party-details-btn">Ver Mais</a>
         </div>
-                <div class="party-container">
+        <div class="party-container">
             <div class="party-img" id="party-4"></div>
             <a class="party-title" href="#">Reveillon de Floripa</a>
             <p class="party-date">Data: 31/12/2019</p>
@@ -29,7 +35,53 @@
     </div>
   </div>
 </template>
+<script>
 
+export default {
+    data() {
+        return {
+            parties: []
+        }
+    },
+    created() {
+        // load public parties
+        this.getParties();
+    },
+    methods: {
+        async getParties() {
+
+            await fetch(`http://localhost:3000/api/party/all`, {
+                method: "GET",
+                headers: { 
+                    "Content-type": "application/json"
+                }
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                data.parties.forEach((party, index) => {
+
+                    if(party.partyDate) {
+                        party.partyDate = new Date(party.partyDate).toLocaleDateString();
+                    }
+
+                    party.photos.forEach((photo, index) => {
+                        party.photos[index] = photo.replace("public", "http://localhost:3000").replaceAll("\\", "/");
+                    });
+
+                });
+
+                this.parties = data.parties;
+
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+        }
+    }
+}
+</script>
 <style scoped>
 
     .home {
