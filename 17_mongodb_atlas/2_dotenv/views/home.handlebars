@@ -1,0 +1,27 @@
+<h1>Suas notas:</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Título:</th>
+      <th scope="col">Ações:</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each notes}}
+    <tr>
+      <th scope="row">{{ @index }}</th>
+      <td class="title-column"><a href="notes/{{ this._id }}">{{ this.title }}</a></td>
+      <td class="actions-column">
+        <a href="notes/edit/{{ this._id }}" class="btn btn-primary">Editar</a>
+        <form action="notes/delete" method="POST">
+          <input type="hidden" name="id" value={{ this._id }}>
+          <input class="btn btn-danger" type="submit" value="Remover">
+        </form>
+      </td>
+    </tr>
+    {{ else }}
+      <p>Não há notas no sistema ainda, <a href="notes">clique aqui para adicionar.</a></p>
+    {{/each}}
+  </tbody>
+</table>
